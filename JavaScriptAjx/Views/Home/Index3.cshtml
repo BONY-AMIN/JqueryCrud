@@ -1,0 +1,83 @@
+﻿
+
+@{
+    ViewBag.Title = "Index1";
+}
+
+@section scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            //$("#btn").click(function () {
+            //    $("#test1").text("Change Text");
+            //});
+
+            //$("#btn1").click(function () {
+            //    $("#test2").html("<b>Change Html</b>");
+            //});
+            //$("#btn2").click(function () {
+            //    $("#test3").val("Change Value");
+            //});
+            $("#btn").click(function () {
+                $("#test1").prepend(" <b>Appended text</b>.");
+            });
+
+            $("#btn1").click(function () {
+                $("ol").prepend("<li>Appended item</li>");
+            })
+            $("#btnr").click(function () {
+                $("#div1").empty();
+            });
+            $("#adcls").click(function () {
+                $("h1,h2").toggleClass("blue");
+                $("#adc").toggleClass("important");
+            });
+          
+        });
+    </script>
+}
+<p id="test1">This is a paragraph.</p>
+@*<p id="test2">This is another paragraph.</p>*@
+<ol>
+    <li>LIst item</li>
+</ol>
+<p>  Name:<input id="test3" type="text" value="bony" /></p>
+<button id="btn">Apend text</button>
+<button id="btn1">Apend Item</button>
+@*<button id="btn2">Set Value</button>*@
+<button id="btnr">Remove</button>
+
+<div id="div1" style="height:100px;width:300px;border:1px solid black;background-color:yellow;">
+
+    This is some text in the div.
+    <p>This is a paragraph in the div.</p>
+    <p>This is another paragraph in the div.</p>
+
+</div>
+<style>
+    .important {
+        font-weight: bold;
+        font-size: xx-large;
+    }
+
+    .blue {
+        color: blue;
+    }
+
+    
+</style>
+
+
+
+    <h1>Heading 1</h1>
+    <h2>Heading 2</h2>
+
+    <p>This is a paragraph.</p>
+    <p>This is another paragraph.</p>
+
+    <div id="adc">This is some important text!</div><br>
+
+    <button id="adcls">Add classes to elements</button>
+
+ 

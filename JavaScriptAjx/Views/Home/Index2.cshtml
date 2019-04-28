@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Index1";
+}
+
+@section scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $("#btn").click(function () {
+                alert("Value: " + $("#test").val());
+            });
+
+            $("#btn1").click(function () {
+                alert("Text: " + $("#test1").text());
+            });
+            $("#btn2").click(function () {
+                alert("HTML: " + $("#test1").html());
+            });
+
+        });
+    </script>
+}
+ <p id="test1">This is some <b>bold</b> text in a paragraph.</p>
+<p>  Name:<input id="test" type="text" value="bony" /></p>
+<button id="btn">Show value</button>
+<button id="btn1">Show Text</button>
+<button id="btn2">Show Html</button>

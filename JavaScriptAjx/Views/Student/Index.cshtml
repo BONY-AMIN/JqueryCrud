@@ -1,0 +1,223 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<button type="button" id="btnadd" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+    Add
+</button>
+
+<div class="row">
+    <div class="col-md-6">
+        <table id="tbl" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        StudentId
+                    </th>
+                    <th>
+                        StudentName
+                    </th>
+                    <th>
+                        AdmitDate
+                    </th>
+                    <th>
+                        Option
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Input Field</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="cid" hidden />
+                <div>
+                    StudentName: <input type="text" id="namef" class="form-control" />
+                    AdmitDate: <input id="dt" type="date" class="form-control" />
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input type="button" class="btn btn-primary" data-dismiss="modal" value="save" id="btnsave" />
+                <input type="button" class="btn btn-primary" data-dismiss="modal" value="Update" id="btnupdate" />
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            show();
+            $("#btnsave").click(function () {
+                Save();
+            })
+
+            $("#btnupdate").click(function () {
+                UpdateData();
+            })
+
+            $("#btnadd").click(function () {
+                clear();
+                $("#btnsave").show();
+                $("#btnupdate").hide();
+            })
+
+        })
+
+
+        function show() {
+            $.ajax({
+                url: "Student/AllGet/",
+                type: "Get",
+                dataType: "json",
+                contentType: "application/json"
+            }).done(function (get) {
+                console.log(get);
+                $("#tbl tbody").empty();
+                $.each(get, function (i, v) {
+                    $("#tbl tbody").append(
+                        "<tr><td>" + v.StudentId + "</td><td>" + v.StudentName + "</td><td>" + v.AdmitDate + "</td><td>" +
+                        "<input type='button' value='Edit' onclick='GetById(" + v.StudentId + ")' data-toggle='modal' data-target='#exampleModalCenter'/> || <input type='button' value='Details' onclick='Details(" + v.StudentId + ")' data-toggle='modal' data-target='#exampleModalCenter'/> || <input type='button' value='Delete' onclick='Delete(" + v.StudentId + ")'/>" + "</td></tr>"
+                    )
+                })
+            })
+        }
+
+        function Save() {
+            
+            var data = {
+                StudentName: $("#namef").val(),
+                AdmitDate: $("#dt").val()
+
+            }
+          
+            console.log(data)
+            $.ajax({
+                url: "/Student/savex",
+                data: "Post",
+                dataType: "json",
+                contentType: "application/json",
+                data: data,
+            }).done(function () {
+               
+                //alert("Save Success")
+                show();
+                clear();
+                }).fail(function () {
+
+                })
+        }
+
+        function GetById(id) {
+            $("#btnsave").hide();
+            $("#btnupdate").show();
+           
+            $.ajax({
+                url: "/Student/GetById?id="+ id,
+                type: "Get",
+                dataType: "json",
+                contentType: "application/json"
+            }).done(function (get) {
+              
+                console.log(get);
+                $("#cid").val("");
+                $("#namef").val("");
+                $("#dt").val("");
+                $("#cid").val(get.StudentId);
+                $("#namef").val(get.StudentName);
+                $("#dt").val(get.AdmitDate);
+            })
+        }
+
+        function UpdateData(id) {
+            var data = {
+                StudentId: $("#cid").val(),
+                StudentName: $("#namef").val(),
+                AdmitDate: $("#dt").val()
+            }
+            $.ajax({
+                url: "/Student/Update",
+                type: "Post",
+                dataType: "json",
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            }).done(function (data) {
+                console.log(data);
+                alert("Success")
+                    show();
+                }).fail(function (ex) {
+                    alert(ex)
+                })
+        }
+
+        function Details(id) {
+            $("#btnsave").hide();
+            $("#btnupdate").hide();
+            $.ajax({
+                url: "/Student/GetById?id=" + id,
+                type: "Get",
+                dataType: "json",
+                contentType: "application/json"
+            }).done(function (get) {
+                $("#namef").prop("readonly", true);
+                $("#dt").prop("readonly", true);
+                console.log(get);
+                $("#cid").val("");
+                $("#namef").val("");
+                $("#dt").val("");
+                $("#cid").val(get.StudentId);
+                $("#namef").val(get.StudentName);
+                $("#dt").val(get.AdmitDate);
+            })
+        }
+
+        function Delete(id) {
+            $.ajax({
+                url: "/Student/DeleteConfirmed?id=" + id,
+                type: "Post",
+                dataType: "json",
+                contentType:"application/json"
+
+            }).done(function (data) {
+                show();
+            })
+        }
+
+        function clear() {
+            $("#namef").val("");
+            $("#dt").val("");
+            $("#cid").val("");
+
+        }
+
+        function formvalid() {
+            var x = $("#namef").val();
+            if (x = "") {
+                alert("Name must be filled out");
+                return false;
+            }
+            else {
+                return true;
+            }
+            }
+        
+
+    </script>
+
+}
